@@ -29,8 +29,6 @@ public class RegistroPedidoFrame extends javax.swing.JFrame {
 
     public Pedido pedido;
     private ButtonGroup bg;
-    private final String SUCURSAL_PRINCIPAL = "Principal";
-    private final String SUCURSAL_SECUNDARIA = "Secundaria";
 
     /**
      * Creates new form DisplayFrame
@@ -308,31 +306,10 @@ public class RegistroPedidoFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_borrarBtnActionPerformed
 
     private void confirmarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmarBtnActionPerformed
-
-        if (medicamento.getText().isBlank() || cantidad.getText().isBlank() || bg.getSelection() == null || (!sucursalPrincipal.isSelected() && !sucursalSecundaria.isSelected())) {
+        if (!GenerarPedido.validarDatosIngresaros(medicamento.getText(), cantidad.getText(), bg, sucursalPrincipal.isSelected(), sucursalSecundaria.isSelected(), tipoMedicamentoComboBox)){
             JOptionPane.showMessageDialog(this, "Verifique el formulario, campos incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            List<String> sucursal = new ArrayList<>();
-            if (sucursalPrincipal.isSelected()) {
-                sucursal.add(SUCURSAL_PRINCIPAL);
-            }
-            if (sucursalSecundaria.isSelected()) {
-                sucursal.add(SUCURSAL_SECUNDARIA);
-            }
-            this.pedido = new Pedido();
-            pedido.setNombreMedicamento(medicamento.getText());
-            pedido.setTipoMedicamento(tipoMedicamentoComboBox.getSelectedItem().toString());
-            pedido.setCantidadMedicamento(Long.parseLong(cantidad.getText()));
-            pedido.setSucursal(sucursal);
-            for (Enumeration<AbstractButton> buttons = bg.getElements(); buttons.hasMoreElements();) {
-                AbstractButton button = buttons.nextElement();
-                if (button.isSelected()) {
-                    pedido.setNombreDistribuidor(button.getText());
-                }
-            }
-            GenerarPedido generarPedido = new GenerarPedido();
-            generarPedido.crearPedido(pedido);
         }
+        
     }//GEN-LAST:event_confirmarBtnActionPerformed
 
     private void resetComponents(Container container) {
