@@ -306,7 +306,7 @@ public class RegistroPedidoFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_borrarBtnActionPerformed
 
     private void confirmarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmarBtnActionPerformed
-        if (!GenerarPedido.validarDatosIngresaros(medicamento.getText(), cantidad.getText(), bg, sucursalPrincipal.isSelected(), sucursalSecundaria.isSelected(), tipoMedicamentoComboBox)){
+        if (!GenerarPedido.validarDatosIngresados(medicamento.getText(), cantidad.getText(), bg, sucursalPrincipal.isSelected(), sucursalSecundaria.isSelected(), tipoMedicamentoComboBox)){
             JOptionPane.showMessageDialog(this, "Verifique el formulario, campos incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
         }
         

@@ -18,7 +18,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,8 +31,15 @@ public class GenerarPedido {
     private static final String SUCURSAL_PRINCIPAL = "Principal";
     private static final String SUCURSAL_SECUNDARIA = "Secundaria";
 
+    /**
+     * Crea un resumen del pedido y muestra una ventana de confirmación.
+     *
+     * @param dto Objeto Pedido que contiene la información del pedido a
+     * confirmar.
+     */
     public void crearPedido(Pedido dto) {
         String direccion;
+        // Determina la dirección basada en las sucursales seleccionadas
         if (dto.getSucursal().size() > 1) {
             direccion = DIR_PRINCIPAL + " y para la situada en " + DIR_SECUNDARIA;
         } else if (dto.getSucursal().get(0).equalsIgnoreCase("principal")) {
@@ -41,6 +47,7 @@ public class GenerarPedido {
         } else {
             direccion = DIR_SECUNDARIA;
         }
+        // Crea y configura la ventana de resumen del pedido
         ResumenPedidoFrame resumenPedido = new ResumenPedidoFrame(dto.getNombreDistribuidor(), dto.getCantidadMedicamento(), dto.getTipoMedicamento(), dto.getNombreMedicamento(), direccion);
         resumenPedido.setLocationRelativeTo(null);
         resumenPedido.setResizable(false);
@@ -61,10 +68,25 @@ public class GenerarPedido {
         resumenPedido.setVisible(true);
     }
 
-    public static boolean validarDatosIngresaros(String medicamento, String cantidad, ButtonGroup bg, boolean sucursalPrincipal, boolean sucursalSecundaria, JComboBox<String> tipoMedicamentoComboBox) {
+    /**
+     * Valida los datos ingresados para un pedido antes de confirmarlo.
+     *
+     * @param medicamento Nombre del medicamento ingresado.
+     * @param cantidad Cantidad requerida del medicamento.
+     * @param bg Grupo de botones que representa los distribuidores disponibles.
+     * @param sucursalPrincipal Indica si se seleccionó la sucursal principal.
+     * @param sucursalSecundaria Indica si se seleccionó la sucursal secundaria.
+     * @param tipoMedicamentoComboBox ComboBox que contiene los tipos de
+     * medicamento disponibles.
+     * @return true si todos los datos están correctamente ingresados y se puede
+     * proceder con el pedido, false de lo contrario.
+     */
+    public static boolean validarDatosIngresados(String medicamento, String cantidad, ButtonGroup bg, boolean sucursalPrincipal, boolean sucursalSecundaria, JComboBox<String> tipoMedicamentoComboBox) {
+        // Validar que todos los campos requeridos estén llenos
         if (medicamento.isBlank() || cantidad.isBlank() || bg.getSelection() == null || (!sucursalPrincipal && !sucursalSecundaria)) {
             return false;
         } else {
+            // Crear el objeto Pedido con los datos ingresados
             List<String> sucursal = new ArrayList<>();
             if (sucursalPrincipal) {
                 sucursal.add(SUCURSAL_PRINCIPAL);
@@ -77,15 +99,18 @@ public class GenerarPedido {
             pedido.setTipoMedicamento(tipoMedicamentoComboBox.getSelectedItem().toString());
             pedido.setCantidadMedicamento(Long.parseLong(cantidad));
             pedido.setSucursal(sucursal);
+            // Obtener el nombre del distribuidor seleccionado
             for (Enumeration<AbstractButton> buttons = bg.getElements(); buttons.hasMoreElements();) {
                 AbstractButton button = buttons.nextElement();
                 if (button.isSelected()) {
                     pedido.setNombreDistribuidor(button.getText());
                 }
             }
+            // Crear y confirmar el pedido
             GenerarPedido generarPedido = new GenerarPedido();
             generarPedido.crearPedido(pedido);
         }
         return true;
     }
+
 }
